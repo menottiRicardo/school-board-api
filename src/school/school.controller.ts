@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { Prisma } from '@prisma/client';
+import { CreateClassroomDto } from './dto/create-classroom.dto';
 
 @Controller('school')
 export class SchoolController {
@@ -41,8 +42,8 @@ export class SchoolController {
   }
 
   @Post('/create-classroom')
-  createClassroom(@Body() classroom: Prisma.ClassroomCreateInput) {
-    return this.schoolService.createClassroom({ data: classroom });
+  createClassroom(@Body() classroom: CreateClassroomDto) {
+    return this.schoolService.createClassroom(classroom);
   }
 
   @Get('/get-classroom/:id')

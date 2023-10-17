@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { CreateClassroomDto } from './dto/create-classroom.dto';
 
 @Injectable()
 export class SchoolService {
@@ -34,23 +35,19 @@ export class SchoolService {
     return this.prisma.subject.create(newSubject);
   }
 
-  createClassroom(newClassroom: Prisma.ClassroomCreateArgs) {
+  createClassroom(newClassroom: CreateClassroomDto) {
     // do some validation
-
-    console.log('tee', JSON.stringify(newClassroom));
     return this.prisma.classroom.create({
       data: {
-        name: newClassroom.data.name,
-        schoolYearId: newClassroom.data.schoolYearId,
+        name: newClassroom.name,
+        schoolYearId: newClassroom.schoolYearId,
         Users: {
           connect: {
-            // @ts-ignore
-            id: newClassroom.data.teacherId,
+            id: newClassroom.teacherId,
           },
         },
         subjects: {
-          // @ts-ignore
-          connect: newClassroom.data.subjects,
+          connect: newClassroom.subjects,
         },
       },
     });
