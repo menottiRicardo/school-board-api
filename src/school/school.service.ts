@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateSchoolDto } from './dto/update-school.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
@@ -24,6 +23,49 @@ export class SchoolService {
     return this.prisma.schoolYear.create(newSchoolYear);
   }
 
+  createProfesor(newProf: Prisma.UserCreateArgs) {
+    // do some validation
+
+    return this.prisma.user.create(newProf);
+  }
+
+  createSubject(newSubject: Prisma.SubjectCreateArgs) {
+    // do some validation
+    return this.prisma.subject.create(newSubject);
+  }
+
+  createClassroom(newClassroom: Prisma.ClassroomCreateArgs) {
+    // do some validation
+
+    console.log('tee', JSON.stringify(newClassroom));
+    return this.prisma.classroom.create({
+      data: {
+        name: newClassroom.data.name,
+        schoolYearId: newClassroom.data.schoolYearId,
+        Users: {
+          connect: {
+            // @ts-ignore
+            id: newClassroom.data.teacherId,
+          },
+        },
+        subjects: {
+          // @ts-ignore
+          connect: newClassroom.data.subjects,
+        },
+      },
+    });
+  }
+
+  getClassroom(id: string) {
+    return this.prisma.classroom.findUnique({
+      where: { id: id },
+      include: {
+        Users: true,
+        subjects: true,
+      },
+    });
+  }
+
   findAll() {
     return `This action returns all school`;
   }
@@ -32,7 +74,7 @@ export class SchoolService {
     return `This action returns a #${id} school`;
   }
 
-  update(id: number, updateSchoolDto: UpdateSchoolDto) {
+  update(id: number) {
     return `This action updates a #${id} school`;
   }
 

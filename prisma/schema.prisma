@@ -11,19 +11,20 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  cid         String       @unique
-  name        String?
-  lastname    String?
-  password    String?
-  role        Role         @default(STUDENT)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  school      School?      @relation(fields: [schoolId], references: [id])
-  schoolId    String?
-  Classroom   Classroom?   @relation(fields: [classroomId], references: [id])
-  classroomId String?
-  Assignment  Assignment[]
+  id           String       @id @default(uuid())
+  cid          String       @unique
+  name         String?
+  lastname     String?
+  password     String?
+  role         Role         @default(STUDENT)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  Classroom    Classroom?   @relation(fields: [classroomId], references: [id])
+  classroomId  String?
+  Assignment   Assignment[]
+  SchoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String?
+  Subject      Subject[]
 }
 
 enum Role {
@@ -38,59 +39,59 @@ model School {
   name       String?      @unique
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
-  users      User[]
-  Classroom  Classroom[]
-  Period     Period[]
   SchoolYear SchoolYear[]
-  Subject    Subject[]
 }
 
 model Classroom {
-  id               String       @id @default(uuid())
-  name             String
-  School           School       @relation(fields: [schoolId], references: [id])
-  schoolId         String
-  Users            User[]
-  assignments      Assignment[]
-  Subject          Subject?     @relation(fields: [subjectId], references: [subjectId])
-  subjectId String?
+  id           String       @id @default(uuid())
+  name         String
+  Users        User[]
+  assignments  Assignment[]
+  subjects     Subject[]
+  SchoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String?
 }
 
 model Subject {
-  subjectId   String       @id @default(uuid())
-  name        String
-  grade       String?
-  Assignments Assignment[]
-  classrooms  Classroom[]
-  School      School       @relation(fields: [schoolId], references: [id])
-  schoolId    String
+  id           String       @id @default(uuid())
+  name         String
+  Assignments  Assignment[]
+  classrooms   Classroom[]
+  schoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String?
+  teacher      User?        @relation(fields: [teacherId], references: [id])
+  teacherId    String?
 }
 
 model Assignment {
-  id               String    @id @default(uuid())
-  name             String
-  description      String
-  Classroom        Classroom @relation(fields: [classroomId], references: [id])
-  classroomId      String
-  dueDate          DateTime
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  professor        User      @relation(fields: [professorId], references: [id])
-  professorId      String
-  Period           Period?   @relation(fields: [periodId], references: [id])
-  periodId         String?
-  Subject          Subject?  @relation(fields: [subjectId], references: [subjectId])
-  subjectId String?
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  Classroom   Classroom @relation(fields: [classroomId], references: [id])
+  classroomId String
+  dueDate     DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  professor   User      @relation(fields: [professorId], references: [id])
+  professorId String
+  Period      Period?   @relation(fields: [periodId], references: [id])
+  periodId    String?
+  Subject     Subject?  @relation(fields: [subjectId], references: [id])
+  subjectId   String?
 }
 
 model SchoolYear {
-  id        String   @id @default(uuid())
-  year      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  School    School   @relation(fields: [schoolId], references: [id])
-  schoolId  String
-  Period    Period[]
+  id         String      @id @default(uuid())
+  year       String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  School     School      @relation(fields: [schoolId], references: [id])
+  schoolId   String
+  schoolName String
+  Period     Period[]
+  classrooms Classroom[]
+  users      User[]
+  subjects   Subject[]
 }
 
 model Period {
@@ -100,8 +101,6 @@ model Period {
   endDate        DateTime
   isPeriodActive Boolean      @default(false)
   Assignments    Assignment[]
-  School         School       @relation(fields: [schoolId], references: [id])
-  schoolId       String
   SchoolYear     SchoolYear?  @relation(fields: [schoolYearId], references: [id])
   schoolYearId   String?
 }

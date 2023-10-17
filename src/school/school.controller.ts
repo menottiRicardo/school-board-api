@@ -8,7 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SchoolService } from './school.service';
-import { UpdateSchoolDto } from './dto/update-school.dto';
 import { Prisma } from '@prisma/client';
 
 @Controller('school')
@@ -31,14 +30,34 @@ export class SchoolController {
     return this.schoolService.createSchoolYear({ data: schoolYear });
   }
 
+  @Post('/create-teacher')
+  createTeacher(@Body() teacher: Prisma.UserCreateInput) {
+    return this.schoolService.createProfesor({ data: teacher });
+  }
+
+  @Post('/create-subject')
+  createSubject(@Body() Subject: Prisma.SubjectCreateInput) {
+    return this.schoolService.createSubject({ data: Subject });
+  }
+
+  @Post('/create-classroom')
+  createClassroom(@Body() classroom: Prisma.ClassroomCreateInput) {
+    return this.schoolService.createClassroom({ data: classroom });
+  }
+
+  @Get('/get-classroom/:id')
+  classroom(@Param('id') classroomId: string) {
+    return this.schoolService.getClassroom(classroomId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.schoolService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
-    return this.schoolService.update(+id, updateSchoolDto);
+  update(@Param('id') id: string) {
+    return this.schoolService.update(+id);
   }
 
   @Delete(':id')
