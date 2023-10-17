@@ -46,9 +46,23 @@ export class SchoolController {
     return this.schoolService.createClassroom(classroom);
   }
 
-  @Get('/get-classroom/:id')
-  classroom(@Param('id') classroomId: string) {
+  @Get('/classroom/:id')
+  classrooms(@Param('id') classroomId: string) {
     return this.schoolService.getClassroom(classroomId);
+  }
+  @Get('/classrooms/:id')
+  classroom(@Param('id') schoolYearId: string) {
+    return this.schoolService.getClassrooms(schoolYearId);
+  }
+
+  @Get('/teacher/:id')
+  teachers(@Param('id') teacher: string) {
+    return this.schoolService.getTeacher(teacher);
+  }
+
+  @Get('/subject/:id')
+  subjects(@Param('id') subjectId: string) {
+    return this.schoolService.getSubject(subjectId);
   }
 
   @Get(':id')

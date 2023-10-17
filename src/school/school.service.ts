@@ -11,32 +11,26 @@ export class SchoolService {
     return this.prisma.school.create({ data: newSchool });
   }
 
-  createPeriod(newPeriod: Prisma.PeriodCreateArgs) {
-    // do some validation
-    return this.prisma.period.create(newPeriod);
-  }
-
   createSchoolYear(newSchoolYear: Prisma.SchoolYearCreateArgs) {
-    // do some validation
     if (newSchoolYear.data.schoolId == null) {
       throw new Error('School id is required');
     }
     return this.prisma.schoolYear.create(newSchoolYear);
   }
 
-  createProfesor(newProf: Prisma.UserCreateArgs) {
-    // do some validation
+  createPeriod(newPeriod: Prisma.PeriodCreateArgs) {
+    return this.prisma.period.create(newPeriod);
+  }
 
+  createProfesor(newProf: Prisma.UserCreateArgs) {
     return this.prisma.user.create(newProf);
   }
 
   createSubject(newSubject: Prisma.SubjectCreateArgs) {
-    // do some validation
     return this.prisma.subject.create(newSubject);
   }
 
   createClassroom(newClassroom: CreateClassroomDto) {
-    // do some validation
     return this.prisma.classroom.create({
       data: {
         name: newClassroom.name,
@@ -58,8 +52,28 @@ export class SchoolService {
       where: { id: id },
       include: {
         Users: true,
-        subjects: true,
       },
+    });
+  }
+
+  getClassrooms(schoolYearId: string) {
+    return this.prisma.classroom.findMany({
+      where: { schoolYearId },
+      include: {
+        Users: true,
+      },
+    });
+  }
+
+  getSubject(id: string) {
+    return this.prisma.subject.findUnique({
+      where: { id: id },
+    });
+  }
+
+  getTeacher(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id: id },
     });
   }
 
