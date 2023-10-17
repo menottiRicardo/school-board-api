@@ -17,13 +17,18 @@ export class SchoolController {
 
   // create a new school
   @Post('/create-school')
-  create(@Body() newSchool: Prisma.SchoolCreateArgs) {
-    return this.schoolService.createSchool({ data: newSchool });
+  createSchool(@Body() newSchool: Prisma.SchoolCreateInput) {
+    return this.schoolService.createSchool(newSchool);
   }
 
-  @Get()
-  findAll() {
-    return this.schoolService.findAll();
+  @Post('/create-period')
+  createPeriod(@Body() period: Prisma.PeriodCreateInput) {
+    return this.schoolService.createPeriod({ data: period });
+  }
+
+  @Post('/create-school-year')
+  createSchoolYear(@Body() schoolYear: Prisma.SchoolYearCreateInput) {
+    return this.schoolService.createSchoolYear({ data: schoolYear });
   }
 
   @Get(':id')
