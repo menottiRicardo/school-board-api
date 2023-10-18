@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { Prisma } from '@prisma/client';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
@@ -63,20 +55,5 @@ export class SchoolController {
   @Get('/subject/:id')
   subjects(@Param('id') subjectId: string) {
     return this.schoolService.getSubject(subjectId);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.schoolService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.schoolService.update(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.schoolService.remove(+id);
   }
 }

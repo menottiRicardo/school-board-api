@@ -25,6 +25,7 @@ model User {
   SchoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
   schoolYearId String?
   Subject      Subject[]
+  grades        Grade[]
 }
 
 enum Role {
@@ -78,6 +79,7 @@ model Assignment {
   periodId    String?
   Subject     Subject?  @relation(fields: [subjectId], references: [id])
   subjectId   String?
+  grades       Grade[]
 }
 
 model SchoolYear {
@@ -103,4 +105,15 @@ model Period {
   Assignments    Assignment[]
   SchoolYear     SchoolYear?  @relation(fields: [schoolYearId], references: [id])
   schoolYearId   String?
+}
+
+model Grade {
+  id           String     @id @default(uuid())
+  value        Float // This can be a number or a letter, depending on your grading system.
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  Assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId String
+  Student      User       @relation(fields: [studentId], references: [id])
+  studentId    String
 }
