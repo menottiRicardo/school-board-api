@@ -25,6 +25,11 @@ export class AssigController {
     return this.assigService.findAll();
   }
 
+  @Get('/get-assignment-by-teacher/:id')
+  findByProfessor(@Param('id') id: string) {
+    return this.assigService.findByTeacher(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.assigService.findOne(+id);

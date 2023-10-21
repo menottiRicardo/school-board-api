@@ -12,16 +12,16 @@ export class AssigService {
         name: createAssigDto.name,
         description: createAssigDto.description,
         dueDate: createAssigDto.dueDate,
-        Classroom: {
+        classroom: {
           connect: { id: createAssigDto.classroomId },
         },
         professor: {
           connect: { id: createAssigDto.professorId },
         },
-        Period: {
+        period: {
           connect: { id: createAssigDto.periodId },
         },
-        Subject: {
+        subject: {
           connect: { id: createAssigDto.subjectId },
         },
       },
@@ -30,6 +30,30 @@ export class AssigService {
 
   findAll() {
     return `This action returns all assig`;
+  }
+
+  findByTeacher(teacherId: string) {
+    return this.prisma.assignment.findMany({
+      where: {
+        professorId: teacherId,
+      },
+      select: {
+        id: true,
+        subjectId: true,
+        name: true,
+        dueDate: true,
+        description: true,
+        createdAt: true,
+        type: true,
+        periodId: true,
+        classroom: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+    });
   }
 
   findOne(id: number) {

@@ -19,13 +19,12 @@ model User {
   role         Role         @default(STUDENT)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  Classroom    Classroom?   @relation(fields: [classroomId], references: [id])
-  classroomId  String?
+  classrooms   Classroom[]
   Assignment   Assignment[]
+  Subject      Subject[]
+  grades       Grade[]
   SchoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
   schoolYearId String?
-  Subject      Subject[]
-  grades        Grade[]
 }
 
 enum Role {
@@ -33,6 +32,12 @@ enum Role {
   STUDENT
   TEACHER
   PARENT
+}
+
+enum GradeType {
+  NOTA_DIARIA
+  APRECIACION
+  TRIMESTRAL
 }
 
 model School {
@@ -68,18 +73,19 @@ model Assignment {
   id          String    @id @default(uuid())
   name        String
   description String
-  Classroom   Classroom @relation(fields: [classroomId], references: [id])
+  classroom   Classroom @relation(fields: [classroomId], references: [id])
   classroomId String
   dueDate     DateTime
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   professor   User      @relation(fields: [professorId], references: [id])
   professorId String
-  Period      Period?   @relation(fields: [periodId], references: [id])
+  period      Period?   @relation(fields: [periodId], references: [id])
   periodId    String?
-  Subject     Subject?  @relation(fields: [subjectId], references: [id])
+  subject     Subject?  @relation(fields: [subjectId], references: [id])
   subjectId   String?
-  grades       Grade[]
+  grades      Grade[]
+  type        GradeType @default(NOTA_DIARIA)
 }
 
 model SchoolYear {

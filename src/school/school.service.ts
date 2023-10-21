@@ -56,6 +56,21 @@ export class SchoolService {
     });
   }
 
+  getClassroomsByTeacher(teacherId: string) {
+    return this.prisma.classroom.findMany({
+      where: {
+        subjects: {
+          some: {
+            teacherId: teacherId,
+          },
+        },
+      },
+      include: {
+        subjects: true,
+      },
+    });
+  }
+
   getClassrooms(schoolYearId: string) {
     return this.prisma.classroom.findMany({
       where: { schoolYearId },
@@ -71,9 +86,21 @@ export class SchoolService {
     });
   }
 
+  getSubjectsByTeacher(teacherId: string) {
+    return this.prisma.subject.findMany({
+      where: { teacherId },
+    });
+  }
+
   getTeacher(id: string) {
     return this.prisma.user.findUnique({
       where: { id: id },
+    });
+  }
+
+  getPeriods(schoolYearId: string) {
+    return this.prisma.period.findMany({
+      where: { schoolYearId: schoolYearId },
     });
   }
 

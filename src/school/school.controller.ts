@@ -42,6 +42,12 @@ export class SchoolController {
   classrooms(@Param('id') classroomId: string) {
     return this.schoolService.getClassroom(classroomId);
   }
+
+  @Get('/classrooms-by-teacher/:id')
+  classroomByTeacher(@Param('id') teacherId: string) {
+    return this.schoolService.getClassroomsByTeacher(teacherId);
+  }
+
   @Get('/classrooms/:id')
   classroom(@Param('id') schoolYearId: string) {
     return this.schoolService.getClassrooms(schoolYearId);
@@ -55,5 +61,15 @@ export class SchoolController {
   @Get('/subject/:id')
   subjects(@Param('id') subjectId: string) {
     return this.schoolService.getSubject(subjectId);
+  }
+
+  @Get('/subjects-by-teacher/:id')
+  subjectsByTeacher(@Param('id') teacherId: string) {
+    return this.schoolService.getSubjectsByTeacher(teacherId);
+  }
+
+  @Get('/periods/:id')
+  periods(@Param('id') schoolYearId: string) {
+    return this.schoolService.getPeriods(schoolYearId);
   }
 }
