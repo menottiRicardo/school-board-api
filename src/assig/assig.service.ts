@@ -15,9 +15,6 @@ export class AssigService {
         classroom: {
           connect: { id: createAssigDto.classroomId },
         },
-        professor: {
-          connect: { id: createAssigDto.professorId },
-        },
         period: {
           connect: { id: createAssigDto.periodId },
         },
@@ -35,7 +32,9 @@ export class AssigService {
   findByTeacher(teacherId: string) {
     return this.prisma.assignment.findMany({
       where: {
-        professorId: teacherId,
+        subject: {
+          teacherId: teacherId,
+        },
       },
       select: {
         id: true,

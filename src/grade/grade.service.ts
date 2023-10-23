@@ -15,15 +15,37 @@ export class GradeService {
     });
   }
 
-  createMany(grades: CreateGradeDto[]) {
-    const data: any = grades.map((grade) => ({
-      assignmentId: grade.assignmentId,
-      studentId: grade.studentId,
-      value: grade.value,
-    }));
-    return this.prisma.grade.createMany({
-      data,
+  async createMany(grades: CreateGradeDto[]) {
+    // separe the grades with id
+    const data = [];
+
+    grades.forEach(async (grade) => {
+      if (grade.id == null) {
+        data.push({
+          assignmentId: grade.assignmentId,
+          studentId: grade.studentId,
+          value: grade.value,
+        });
+      } else {
+        console.log('here', grade);
+        await this.prisma.grade.update({
+          where: {
+            id: grade.id,
+          },
+          data: {
+            assignmentId: grade.assignmentId,
+            studentId: grade.studentId,
+            value: grade.value,
+          },
+        });
+      }
     });
+    if (data) {
+      await this.prisma.grade.createMany({
+        data,
+      });
+    }
+    return;
   }
 
   findAll(id: string) {

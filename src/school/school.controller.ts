@@ -19,7 +19,7 @@ export class SchoolController {
   }
 
   @Post('/create-school-year')
-  createSchoolYear(@Body() schoolYear: Prisma.SchoolYearCreateInput) {
+  createSchoolYear(@Body() schoolYear: Prisma.AcademicYearCreateInput) {
     return this.schoolService.createSchoolYear({ data: schoolYear });
   }
 
@@ -29,8 +29,27 @@ export class SchoolController {
   }
 
   @Post('/create-subject')
-  createSubject(@Body() Subject: Prisma.SubjectCreateInput) {
-    return this.schoolService.createSubject({ data: Subject });
+  createSubject(@Body() Subject: any) {
+    return this.schoolService.createSubject({
+      data: {
+        subjectName: Subject.subjectName,
+        teacher: {
+          connect: {
+            // @ts-ignore
+            id: Subject.teacherId,
+          },
+        },
+        academicYear: {
+          connect: {
+            // @ts-ignore
+            id: Subject.academicYearId,
+          },
+        },
+        classrooms: {
+          connect: Subject.classrooms,
+        },
+      },
+    });
   }
 
   @Post('/create-classroom')
@@ -56,6 +75,11 @@ export class SchoolController {
   @Get('/teacher/:id')
   teachers(@Param('id') teacher: string) {
     return this.schoolService.getTeacher(teacher);
+  }
+
+  @Post('/students/by-classroom')
+  studentsByClassroom(@Body() data: any) {
+    return this.schoolService.getStudentsByClassroom(data);
   }
 
   @Get('/subject/:id')

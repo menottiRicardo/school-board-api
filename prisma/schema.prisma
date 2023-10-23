@@ -10,23 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String       @id @default(uuid())
-  cid          String       @unique
-  name         String?
-  lastname     String?
-  password     String?
-  role         Role         @default(STUDENT)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  classrooms   Classroom[]
-  Assignment   Assignment[]
-  Subject      Subject[]
-  grades       Grade[]
-  SchoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String?
-}
-
 enum Role {
   ADMIN
   STUDENT
@@ -41,32 +24,66 @@ enum GradeType {
 }
 
 model School {
-  id         String       @id @default(uuid())
-  name       String?      @unique
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  SchoolYear SchoolYear[]
+  id            String         @id @default(uuid())
+  schoolName    String
+  academicYears AcademicYear[]
+}
+
+model AcademicYear {
+  id         String      @id @default(uuid())
+  year       String
+  startDate  DateTime
+  endDate    DateTime
+  schoolName String
+  schoolId   String
+  school     School      @relation(fields: [schoolId], references: [id])
+  periods    Period[]
+  classrooms Classroom[]
+  subjects    Subject[]
+}
+
+model Period {
+  id             String       @id @default(uuid())
+  startDate      DateTime
+  endDate        DateTime
+  periodName     String
+  isActive       Boolean      @default(false)
+  assignments    Assignment[]
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id])
 }
 
 model Classroom {
-  id           String       @id @default(uuid())
-  name         String
-  Users        User[]
-  assignments  Assignment[]
-  subjects     Subject[]
-  SchoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String?
+  id             String       @id @default(uuid())
+  name           String
+  users          User[]
+  teacherId      String
+  academicYearId String
+  assignments    Assignment[]
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id])
+  subjects       Subject[]
 }
 
 model Subject {
-  id           String       @id @default(uuid())
-  name         String
-  Assignments  Assignment[]
-  classrooms   Classroom[]
-  schoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String?
-  teacher      User?        @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  id             String       @id @default(uuid())
+  subjectName    String
+  teacherId      String
+  teacher        User         @relation(fields: [teacherId], references: [id])
+  classrooms     Classroom[]
+  assignments    Assignment[]
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id])
+}
+
+model User {
+  id        String      @id @default(uuid())
+  cid       String
+  name      String
+  lastname  String
+  role      Role        @default(STUDENT)
+  classroom Classroom[]
+  subjects  Subject[]
+  grades    Grade[]
 }
 
 model Assignment {
@@ -78,39 +95,12 @@ model Assignment {
   dueDate     DateTime
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  professor   User      @relation(fields: [professorId], references: [id])
-  professorId String
+  subject     Subject   @relation(fields: [subjectId], references: [id])
+  subjectId   String
   period      Period?   @relation(fields: [periodId], references: [id])
   periodId    String?
-  subject     Subject?  @relation(fields: [subjectId], references: [id])
-  subjectId   String?
   grades      Grade[]
   type        GradeType @default(NOTA_DIARIA)
-}
-
-model SchoolYear {
-  id         String      @id @default(uuid())
-  year       String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  School     School      @relation(fields: [schoolId], references: [id])
-  schoolId   String
-  schoolName String
-  Period     Period[]
-  classrooms Classroom[]
-  users      User[]
-  subjects   Subject[]
-}
-
-model Period {
-  id             String       @id @default(uuid())
-  name           String
-  startDate      DateTime
-  endDate        DateTime
-  isPeriodActive Boolean      @default(false)
-  Assignments    Assignment[]
-  SchoolYear     SchoolYear?  @relation(fields: [schoolYearId], references: [id])
-  schoolYearId   String?
 }
 
 model Grade {
@@ -120,6 +110,6 @@ model Grade {
   updatedAt    DateTime   @updatedAt
   Assignment   Assignment @relation(fields: [assignmentId], references: [id])
   assignmentId String
-  Student      User       @relation(fields: [studentId], references: [id])
+  student      User       @relation(fields: [studentId], references: [id])
   studentId    String
 }

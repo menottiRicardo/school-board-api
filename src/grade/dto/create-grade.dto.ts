@@ -11,4 +11,6 @@ export class CreateGradeDto {
   @IsNotEmpty()
   @IsString()
   studentId: string;
+
+  id: string;
 }

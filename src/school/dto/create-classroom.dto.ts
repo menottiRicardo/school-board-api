@@ -7,10 +7,7 @@ export class CreateClassroomDto {
   name: string;
 
   @IsNotEmpty()
-  schoolYearId: string;
-
-  @IsNotEmpty()
-  subjects: Subject[];
+  academicYearId: string;
 }
 
 export interface Subject {

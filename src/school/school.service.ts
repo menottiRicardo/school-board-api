@@ -11,11 +11,11 @@ export class SchoolService {
     return this.prisma.school.create({ data: newSchool });
   }
 
-  createSchoolYear(newSchoolYear: Prisma.SchoolYearCreateArgs) {
+  createSchoolYear(newSchoolYear: Prisma.AcademicYearCreateArgs) {
     if (newSchoolYear.data.schoolId == null) {
       throw new Error('School id is required');
     }
-    return this.prisma.schoolYear.create(newSchoolYear);
+    return this.prisma.academicYear.create(newSchoolYear);
   }
 
   createPeriod(newPeriod: Prisma.PeriodCreateArgs) {
@@ -34,14 +34,11 @@ export class SchoolService {
     return this.prisma.classroom.create({
       data: {
         name: newClassroom.name,
-        schoolYearId: newClassroom.schoolYearId,
-        Users: {
+        teacherId: newClassroom.teacherId,
+        academicYear: {
           connect: {
-            id: newClassroom.teacherId,
+            id: newClassroom.academicYearId,
           },
-        },
-        subjects: {
-          connect: newClassroom.subjects,
         },
       },
     });
@@ -51,7 +48,7 @@ export class SchoolService {
     return this.prisma.classroom.findUnique({
       where: { id: id },
       include: {
-        Users: true,
+        users: true,
       },
     });
   }
@@ -73,9 +70,9 @@ export class SchoolService {
 
   getClassrooms(schoolYearId: string) {
     return this.prisma.classroom.findMany({
-      where: { schoolYearId },
+      where: { academicYearId: schoolYearId },
       include: {
-        Users: true,
+        users: true,
       },
     });
   }
@@ -88,7 +85,9 @@ export class SchoolService {
 
   getSubjectsByTeacher(teacherId: string) {
     return this.prisma.subject.findMany({
-      where: { teacherId },
+      where: {
+        teacherId,
+      },
     });
   }
 
@@ -100,8 +99,47 @@ export class SchoolService {
 
   getPeriods(schoolYearId: string) {
     return this.prisma.period.findMany({
-      where: { schoolYearId: schoolYearId },
+      where: { academicYearId: schoolYearId },
     });
+  }
+
+  getStudentsByClassroom({ classroomId, periodId, subjectId }) {
+    const data = this.prisma.user.findMany({
+      where: {
+        classroom: {
+          some: {
+            id: classroomId,
+          },
+        },
+        // subjects: {
+        //   some: {
+        //     id: subjectId,
+        //   },
+        // },
+      },
+      select: {
+        id: true,
+        name: true,
+        lastname: true,
+        grades: {
+          where: {
+            Assignment: {
+              classroomId: classroomId,
+              subjectId: subjectId,
+              periodId: periodId,
+            },
+          },
+          select: {
+            value: true,
+            createdAt: true,
+            updatedAt: true,
+            assignmentId: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return data;
   }
 
   findAll() {

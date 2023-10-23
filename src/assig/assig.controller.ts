@@ -11,11 +11,11 @@ import { AssigService } from './assig.service';
 import { CreateAssigDto } from './dto/create-assig.dto';
 import { UpdateAssigDto } from './dto/update-assig.dto';
 
-@Controller('assig')
+@Controller('assignment')
 export class AssigController {
   constructor(private readonly assigService: AssigService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createAssigDto: CreateAssigDto) {
     return this.assigService.create(createAssigDto);
   }
@@ -25,7 +25,7 @@ export class AssigController {
     return this.assigService.findAll();
   }
 
-  @Get('/get-assignment-by-teacher/:id')
+  @Get('/by-teacher/:id')
   findByProfessor(@Param('id') id: string) {
     return this.assigService.findByTeacher(id);
   }

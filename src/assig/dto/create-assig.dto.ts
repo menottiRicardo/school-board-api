@@ -15,10 +15,6 @@ export class CreateAssigDto {
 
   @IsNotEmpty()
   @IsString()
-  professorId: string;
-
-  @IsNotEmpty()
-  @IsString()
   periodId: string;
 
   @IsNotEmpty()

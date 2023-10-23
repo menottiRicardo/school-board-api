@@ -11,7 +11,7 @@ export class GradeController {
     return this.gradeService.create(createGradeDto);
   }
 
-  @Post('/many')
+  @Post('/create-many')
   createMany(@Body() createGradeDto: CreateGradeDto[]) {
     return this.gradeService.createMany(createGradeDto);
   }
