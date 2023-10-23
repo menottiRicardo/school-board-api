@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './constants';
 
@@ -19,7 +9,11 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: any) {
-    return this.authService.signIn(signInDto.cid, signInDto.password);
+  async signIn(@Body() signInDto: any) {
+    const { access_token } = await this.authService.signIn(
+      signInDto.cid,
+      signInDto.password,
+    );
+    return { access_token };
   }
 }
