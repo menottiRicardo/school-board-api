@@ -39,7 +39,7 @@ model AcademicYear {
   school     School      @relation(fields: [schoolId], references: [id])
   periods    Period[]
   classrooms Classroom[]
-  subjects    Subject[]
+  subjects   Subject[]
 }
 
 model Period {
@@ -77,9 +77,10 @@ model Subject {
 
 model User {
   id        String      @id @default(uuid())
-  cid       String
+  cid       String      @unique
   name      String
   lastname  String
+  password  String?
   role      Role        @default(STUDENT)
   classroom Classroom[]
   subjects  Subject[]
