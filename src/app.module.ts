@@ -1,23 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GradeModule } from './grade/grade.module';
-import { SchoolModule } from './school/school.module';
-import { AssigModule } from './assig/assig.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './users/auth.guard';
 
+import { AuthModule } from './auth/auth.module';
+
+import { MongoDbDriverModule } from 'nest-mongodb-driver';
+import { SchoolsModule } from './schools/schools.module';
+import { UsersModule } from './users/users.module';
 @Module({
-  imports: [GradeModule, SchoolModule, AssigModule, AuthModule, UsersModule],
-  controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+  imports: [
+    AuthModule,
+    MongoDbDriverModule.forRoot({
+      url: 'mongodb+srv://ricardo:fJeh8nrzjuNWGHTX@cluster0.lcq4hdr.mongodb.net/?retryWrites=true&w=majority',
+    }),
+    SchoolsModule,
+    UsersModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
