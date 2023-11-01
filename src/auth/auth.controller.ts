@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -9,7 +9,13 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Req() req, @Res({ passthrough: true }) res) {
+    const token = await this.authService.login(req.user);
+    console.log('roken', token);
+
+    res.cookie('access_token', token.access_token, {
+      expires: new Date(Date.now() + 3600000),
+    });
+    return token;
   }
 }
