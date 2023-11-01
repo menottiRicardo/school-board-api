@@ -20,6 +20,6 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({ origin: '*' });
-  await app.listen(3001);
+  await app.listen(3001, '::');
 }
 bootstrap();
