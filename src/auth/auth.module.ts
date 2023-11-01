@@ -16,7 +16,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       global: true,
       // TODO: move to env
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '20000s' },
+      signOptions: { expiresIn: '10800s' },
     }),
   ],
   controllers: [AuthController],

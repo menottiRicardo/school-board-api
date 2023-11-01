@@ -13,6 +13,7 @@ export class AcademicYear {
   endDate: Date;
   subjects: Subject[];
   periods: Period[];
+  classrooms: Classroom[];
 }
 
 export class Period {
@@ -28,15 +29,12 @@ export class Subject {
   id: string;
   name: string;
   teacher: string;
-  academicYear: string;
-  academicYearId: string;
+  teacherId: string;
 }
 
 export class Classroom {
   id: string;
   name: string;
-  academicYear: string;
-  academicYearId: string;
   subjects: Subject_Classroom[];
   assignments: Assignment_Classroom[];
 }
@@ -45,8 +43,6 @@ export class Subject_Classroom {
   id: string;
   subjectName: string;
   subjectId: string;
-  classroomName: string;
-  classroomId: string;
 }
 
 export class Assignment_Classroom {

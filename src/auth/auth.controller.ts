@@ -14,7 +14,7 @@ export class AuthController {
     console.log('roken', token);
 
     res.cookie('access_token', token.access_token, {
-      expires: new Date(Date.now() + 3600000),
+      expires: new Date(Date.now() + 10800000),
     });
     return token;
   }
