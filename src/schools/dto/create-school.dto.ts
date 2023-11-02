@@ -11,9 +11,5 @@ export class CreateSchoolDto {
 
   @IsString()
   @IsNotEmpty()
-  city: string;
-
-  @IsString()
-  @IsNotEmpty()
   userId: string;
 }

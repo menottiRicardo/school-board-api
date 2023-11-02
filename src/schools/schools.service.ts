@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
-import { Db } from 'mongodb';
+import { Db, ObjectId } from 'mongodb';
 import { InjectClient } from 'nest-mongodb-driver';
 @Injectable()
 export class SchoolsService {
@@ -14,15 +14,13 @@ export class SchoolsService {
     return `This action returns all schools`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} school`;
+  findOne(id: string) {
+    return this.db.collection('schools').findOne({ _id: new ObjectId(id) });
   }
 
-  update(id: number, updateSchoolDto: UpdateSchoolDto) {
-    return `This action updates a #${id} school`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} school`;
+  update(id: string, updateSchoolDto: UpdateSchoolDto) {
+    return this.db
+      .collection('schools')
+      .updateOne({ _id: new ObjectId(id) }, { $set: updateSchoolDto });
   }
 }

@@ -1,8 +1,9 @@
+// single school collection
+
 export class School {
   id: string;
   name: string;
   address: string;
-  city: string;
   academicYears: AcademicYear[];
 }
 
@@ -11,9 +12,7 @@ export class AcademicYear {
   year: string;
   startDate: Date;
   endDate: Date;
-  subjects: Subject[];
   periods: Period[];
-  classrooms: Classroom[];
 }
 
 export class Period {
