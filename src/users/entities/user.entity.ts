@@ -9,5 +9,6 @@ export class User {
 export interface Sidebar {
   name: string;
   href?: string;
+  icon?: string;
   subMenu?: { name: string; href: string }[];
 }

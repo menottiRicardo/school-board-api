@@ -35,33 +35,39 @@ export class UsersService {
           .toArray();
 
         sidebar.push(...teacherSidebar);
+
+        const classroomSubMenu = [];
+        const gradesSubMenu = [];
+
         classrooms.forEach((classroom) => {
-          const gradesSubMenu = [];
-          const classroomSubMenu = [];
+          console.log(classroom);
 
-          classroom.subjects.forEach((subject) => {
-            classroomSubMenu.push({
-              name: subject.subjectName,
-              href: `/dashboard/classrooms/${classroom._id.toString()}`,
-            });
-            gradesSubMenu.push({
-              name: subject.subjectName,
-              href: `/dashboard/grades-book/${classroom._id.toString()}`,
-            });
-          });
-
-          sidebar.push({
-            name: 'Salones',
-            subMenu: classroomSubMenu,
-          });
-
-          sidebar.push({
-            name: 'Libreta de calificaciones',
-            subMenu: gradesSubMenu,
+          classroomSubMenu.push({
+            name: classroom.classroomName,
+            href: `/dashboard/classrooms/${classroom._id.toString()}`,
           });
         });
 
-        // get subjects
+        subjects.forEach((subject) => {
+          console.log(subject);
+          gradesSubMenu.push({
+            name: subject.name,
+            href: `/dashboard/grades-book/${subject._id.toString()}`,
+          });
+        });
+
+        sidebar.push({
+          name: 'Salones',
+          subMenu: classroomSubMenu,
+          icon: 'School',
+        });
+
+        sidebar.push({
+          name: 'Calificaciones',
+          subMenu: gradesSubMenu,
+          icon: 'FileBarChart',
+        });
+
         break;
 
       default:
