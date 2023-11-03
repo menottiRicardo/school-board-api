@@ -30,23 +30,3 @@ export class Subject {
   teacher: string;
   teacherId: string;
 }
-
-export class Classroom {
-  id: string;
-  name: string;
-  subjects: Subject_Classroom[];
-  assignments: Assignment_Classroom[];
-}
-
-export class Subject_Classroom {
-  id: string;
-  subjectName: string;
-  subjectId: string;
-}
-
-export class Assignment_Classroom {
-  id: string;
-  assignmentName: string;
-  assignmentId: string;
-  periodId: string;
-}

@@ -11,7 +11,6 @@ export class AuthController {
   @Post('login')
   async login(@Req() req, @Res({ passthrough: true }) res) {
     const token = await this.authService.login(req.user);
-    console.log('roken', token);
 
     res.cookie('access_token', token.access_token, {
       expires: new Date(Date.now() + 10800000),
